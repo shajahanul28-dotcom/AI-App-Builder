@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "novaix-ai-app-builder"
+version = "1.2.0"
+description = "Offline-first, resumable AI app-building orchestration engine"
+requires-python = ">=3.10"
+
+[project.scripts]
+novaix = "app.cli:main"
+novaix-dashboard = "app.server:main"
+
+[tool.setuptools.package-data]
+app = ["web/*.html"]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,67 @@
+{
+  "app_name": "AI App Builder",
+  "goal": "Create a professional offline-first Flutter app builder with secure generation, verification and downloadable source projects",
+  "requirements": {
+    "functional": [
+      "core_workflow"
+    ],
+    "non_functional": [
+      "secure",
+      "accessible",
+      "testable",
+      "resumable"
+    ]
+  },
+  "architecture": {
+    "pattern": "clean-architecture",
+    "layers": [
+      "presentation",
+      "domain",
+      "data",
+      "platform"
+    ],
+    "client": "Flutter",
+    "api": "provider-adapter",
+    "storage": "offline-first",
+    "local_ai": {
+      "provider": "Ollama",
+      "model": "qwen2.5-coder:1.5b",
+      "available": false
+    }
+  },
+  "screens": [
+    "Splash",
+    "Onboarding",
+    "Home",
+    "Primary Workflow",
+    "History",
+    "Settings"
+  ],
+  "backend": {
+    "entities": [
+      "User",
+      "Project",
+      "Task",
+      "Artifact",
+      "AuditEvent"
+    ],
+    "auth": "optional",
+    "database": "repository-interface",
+    "api_contract": "versioned-json"
+  },
+  "security": {
+    "rules": [
+      "no-secrets-in-source",
+      "path-boundary-checks",
+      "least-privilege",
+      "audit-tools",
+      "confirm-destructive-actions"
+    ],
+    "risk_levels": [
+      "read",
+      "write",
+      "destructive",
+      "external"
+    ]
+  }
+}

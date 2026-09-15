@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>NOVAIX App Builder</title>
+  <style>
+    :root{color-scheme:dark;--a:#7c5cff;--b:#19b5fe;--panel:#15162a;--text:#f5f6ff;--muted:#a9acc7}
+    *{box-sizing:border-box}body{margin:0;font:16px system-ui;background:radial-gradient(circle at top,#252054,#090a13 58%);color:var(--text);min-height:100vh}
+    main{width:min(900px,92%);margin:auto;padding:42px 0}.brand{font-size:42px;font-weight:900;background:linear-gradient(90deg,var(--a),var(--b));color:transparent;background-clip:text}.tag{color:var(--muted);margin:4px 0 28px}
+    .card{background:#15162aee;border:1px solid #393b61;border-radius:24px;padding:24px;box-shadow:0 22px 70px #0008}label{display:block;margin:16px 0 8px;font-weight:700}
+    input,textarea{width:100%;border:1px solid #45486b;border-radius:14px;background:#0e1020;color:white;padding:14px;font:inherit}textarea{min-height:150px;resize:vertical}
+    button,.download{display:inline-block;border:0;border-radius:14px;padding:14px 22px;margin-top:18px;background:linear-gradient(90deg,var(--a),var(--b));color:white;font-weight:800;text-decoration:none;cursor:pointer}
+    button:disabled{opacity:.55}.status{margin-top:20px;padding:16px;border-radius:14px;background:#0d1021;white-space:pre-wrap;color:var(--muted)}.ok{color:#6ee7a8}.error{color:#ff8c9b}.hidden{display:none}
+  </style>
+</head>
+<body><main><div class="brand">NOVAIX</div><div class="tag">Your Coding Machan — AI App Builder</div>
+  <section class="card"><form id="form"><label>App name</label><input id="name" required maxlength="60" placeholder="Example: DueMate">
+    <label>Describe the app in Tamil or English</label><textarea id="instruction" required minlength="12" placeholder="What should the app do? Include screens, users, data, notifications and design needs."></textarea>
+    <button id="build">Build My App</button></form><div id="status" class="status hidden"></div><a id="download" class="download hidden">Download Flutter Project</a></section>
+</main><script>
+const token=new URLSearchParams(location.search).get('token')||'';const form=document.querySelector('#form'),status=document.querySelector('#status'),button=document.querySelector('#build'),download=document.querySelector('#download');
+form.addEventListener('submit',async e=>{e.preventDefault();button.disabled=true;download.classList.add('hidden');status.className='status';status.textContent='NOVAIX is planning and building your app...';
+try{const response=await fetch('/api/build',{method:'POST',headers:{'Content-Type':'application/json','X-NOVAIX-Token':token},body:JSON.stringify({name:document.querySelector('#name').value,instruction:document.querySelector('#instruction').value})});const data=await response.json();if(!response.ok)throw new Error(data.error||'Build failed');status.className='status ok';status.textContent=`Completed all ${data.current_stage} stages.\nStatus: ${data.company_status}\nYour Flutter project is ready.`;download.href=data.download_url+'?token='+encodeURIComponent(token);download.classList.remove('hidden')}catch(error){status.className='status error';status.textContent=error.message}finally{button.disabled=false}});
+</script></body></html>
+

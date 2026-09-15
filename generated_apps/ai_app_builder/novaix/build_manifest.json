@@ -1,0 +1,12 @@
+{
+  "generator": "NOVAIX AI App Builder",
+  "version": "1.2.0",
+  "package": "ai_app_builder",
+  "files": [
+    "README.md",
+    "analysis_options.yaml",
+    "lib/main.dart",
+    "pubspec.yaml",
+    "test/widget_test.dart"
+  ]
+}
