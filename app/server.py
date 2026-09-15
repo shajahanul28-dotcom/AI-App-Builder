@@ -94,7 +94,25 @@ class NovaixHandler(BaseHTTPRequestHandler):
             name = str(payload.get("name", "")).strip()
             instruction = str(payload.get("instruction", "")).strip()
             result = run(name, instruction)
-            release = result["stages"][-1]["output"]
+            if result.get("company_status") != "completed":
+                failed = next(
+                    (stage for stage in reversed(result.get("stages", [])) if stage.get("status") == "failed"),
+                    None,
+                )
+                if failed:
+                    detail = failed.get("error") or "Unknown build error"
+                    raise ValueError(f"Stage {failed.get('number')} ({failed.get('name')}) failed: {detail}")
+                raise ValueError("Build stopped before completion")
+            release = next(
+                (
+                    stage.get("output", {})
+                    for stage in reversed(result.get("stages", []))
+                    if "artifacts" in stage.get("output", {})
+                ),
+                None,
+            )
+            if release is None:
+                raise ValueError("Build completed without a release artifact")
             archive = Path(release["artifacts"][1])
             result["download_url"] = f"/download/{archive.name}"
             self._json(result)
